@@ -38,14 +38,14 @@ DeepSeek 走 OpenAI 兼容协议（`base_url=https://api.deepseek.com`），仅�
 
 **处理**：不靠肉眼猜，写 `test_no_false_positive_on_plain_text` 单测验证——`sk-` 后必须跟 ≥16 位字母数字（`{16,}`）才命中，普通说明文字不误报。单测通过确认无此误报。
 
-### 记录 3：硬编码路径正则撞上 URL / docker 卷挂载（用户真实仓库暴露）
+### 记录 3：硬编码路径正则撞上 URL / docker 卷挂载（我拿真实仓库暴露）
 
 **错误**：初版 `app/scanners.py` 的硬编码路径正则有两处缺陷：
 
 1. `[A-Za-z]:/` 没加词边界，把 `http://` 匹配成 `p://`、`https://` 匹配成 `s://`、docker 卷 `mysql_data:/var/lib/mysql` 匹配成 `a:/var/lib/mysql`——URL 和容器卷挂载全被误判成「Windows 盘符路径」。
 2. `[A-Za-z]:\\` 正则里 `\\\\` 实际匹配**双反斜杠** `C:\\`，真代码里的单反斜杠 `C:\` 反而漏检。测试用例也用了双反斜杠，掩盖了 bug。
 
-**发现方式**：用户拿自己的两个公开仓库（`Ana12311/CodeMind-AI`、`Ana12311/TaskFlow`）实测，报告「都显示 3 处密钥风险」，反查时发现硬编码路径把 URL 全标红了。单测全是自造样例、没覆盖 URL 场景，所以没抓到。
+**发现方式**：我拿自己的两个公开仓库（`Ana12311/CodeMind-AI`、`Ana12311/TaskFlow`）实测，报告「都显示 3 处密钥风险」，反查时发现硬编码路径把 URL 全标红了。单测全是自造样例、没覆盖 URL 场景，所以没抓到。
 
 **修正**：
 - `[A-Za-z]:/` 加 `\b` 词边界（`http://` 的 `p` 前面是 `t`、`data:/` 的 `a` 前面是 `t`，都无边界，不再误报）。
@@ -64,7 +64,7 @@ DeepSeek 走 OpenAI 兼容协议（`base_url=https://api.deepseek.com`），仅�
 
 **发现方式**：本次验证写 `test_secrets_detect_prefixed_credential` 单测，断言 `SECRET_KEY` / `DB_PASSWORD` / `MY_API_KEY` 三条都应命中，结果只命中 2 条（`SECRET_KEY` 漏了），暴露假阴性。
 
-**修正**：关键字后加 `[A-Za-z0-9_-]*`，允许 `_KEY` / `_PASSWORD` 等后缀再跟 `=`。**假阴性比假阳性更危险**——漏报真密钥会给用户错误的安全感，所以优先保证不漏检，误报交给记录 3 的值启发式过滤。
+**修正**：关键字后加 `[A-Za-z0-9_-]*`，允许 `_KEY` / `_PASSWORD` 等后缀再跟 `=`。**假阴性比假阳性更危险**——漏报真密钥会给我错误的安全感，所以优先保证不漏检，误报交给记录 3 的值启发式过滤。
 
 **教训**：测「命中」时不能只用裸关键字（`SECRET=`），要覆盖真实配置的常见变体（`SECRET_KEY` / `DB_PASSWORD` / `MY_API_KEY` / `AWS_ACCESS_KEY_ID` 等）。
 
@@ -77,7 +77,7 @@ DeepSeek 走 OpenAI 兼容协议（`base_url=https://api.deepseek.com`），仅�
 1. **值级白名单**：`AKIAIOSFODNN7EXAMPLE`（AWS 官方示例 key）、`wJalrXUtnFEMI`、`...` 截断占位、`${...}` 模板、裸 `-----BEGIN ... PRIVATE KEY-----` 头（无 `END` 的真实 key 必然有 `END`）。
 2. **文件级分类**：`docs/` `tests/` `*.md` `references/` `examples/` `skills/` 里的命中是「文档/示例/测试」，不是真实泄露，应降级为低危、不计入接入就绪度扣分。
 
-**发现方式**：用户第三次拿真实仓库测试，`score=69` 且密钥/路径列表全是指标性假数据。反查 `scripts/lint_skills.py` 发现仓库自带 allowlist，正好印证缺这两件事。
+**发现方式**：我第三次拿真实仓库测试，`score=69` 且密钥/路径列表全是指标性假数据。反查 `scripts/lint_skills.py` 发现仓库自带 allowlist，正好印证缺这两件事。
 
 **修正**：
 - 值级：`_SECRET_FP_RE = r"\.\.\.|EXAMPLE|wJalrXUtnFEMI|\$\{"` 跳过；PEM 要求文件含 `-----END` 才算真私钥。

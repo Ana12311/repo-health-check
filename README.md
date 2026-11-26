@@ -39,32 +39,70 @@
 - 仓库获取：`git clone --depth 1 --filter=blob:limit=1m`（浅克隆 + 跳过 1MB 以上大文件），分析后清理
 - AI（可插拔）：DeepSeek API（OpenAI 兼容协议）
 
-## 运行
+## 快速开始（评审 3 步）
+
+### 1. 安装
 
 ```bash
 python -m venv .venv
+
 # Windows
 .venv\Scripts\activate
-# Linux/macOS
+# Linux / macOS
 source .venv/bin/activate
 
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
 ```
 
-浏览器打开 http://127.0.0.1:8000 。
+### 2. 配置 DeepSeek API（可选，用于「AI 复核 + 接入建议」加分项）
 
-## 可选：启用 Agent 复核 + AI 建议
+不配置也能跑——所有规则检测、评分、风险清单照常输出，只是没有 AI 区块。
+
+API key 申请：<https://platform.deepseek.com/api_keys>
+
+**方式 A（推荐）**：在**项目根目录**创建 `.env`（可从 `.env.example` 复制）：
+
+```ini
+DEEPSEEK_API_KEY=sk-你的真实key
+DEEPSEEK_MODEL=deepseek-chat
+```
+
+**方式 B**：用环境变量（注意要与启动 uvicorn 在**同一个终端窗口**）：
+
+```powershell
+$env:DEEPSEEK_API_KEY = "sk-你的真实key"
+```
+
+> `.env` 已列入 `.gitignore`，不会被提交。不要把 key 写进代码、README 或截图。
+
+### 3. 启动并访问
 
 ```bash
-# PowerShell
-$env:DEEPSEEK_API_KEY = "sk-..."
-$env:DEEPSEEK_MODEL   = "deepseek-chat"   # 可选
+uvicorn app.main:app --port 8000
 ```
 
-- 同时启用 **Agent 复核**（medium/low 发现）与 **AI 接入建议**，同一次 API 调用完成。
-- 无 key / 调用失败 / 超时 → `ai: null`，跳过复核，输出纯规则结果，**不阻塞主流程**。
-- 被 Agent 判为误报的中低危发现会从评分中移除，但仍在风险列表末尾以低危展示，便于人工核对。
+浏览器打开 <http://127.0.0.1:8000>，粘贴公开 GitHub 仓库链接（如 `https://github.com/tiangolo/fastapi`），点「开始体检」。
+
+> 不建议加 `--reload`：热重载会在杀进程时留下孤儿 worker 占用端口。
+
+### 如何确认 API key 生效
+
+| 现象 | 有 key | 无 key |
+|---|---|---|
+| 页面底部「AI 接入建议」区块 | 显示结论 + 建议 | 隐藏 |
+| 概览 chip「AI 复核 N 条 · 判误报 M」 | 显示 | 不显示 |
+| 风险条目标签 | `AI 已确认/存疑/判误报` | 无 AI 标签 |
+| `POST /api/analyze` 返回的 `ai` 字段 | 非 `null` | `null` |
+
+### 常见问题
+
+| 现象 | 原因 / 处理 |
+|---|---|
+| 浏览器无法访问 | 服务没起来或端口被占：`netstat -ano \| findstr :8000` 后 `taskkill /PID <pid> /T /F` |
+| `.env` 填了但 AI 仍不显示 | 确认文件在项目根目录、服务在填完之后启动；用 `Get-Content .env` 检查值非空 |
+| 提示「仓库不存在，或为私有仓库」 | 只支持公开 GitHub 仓库；检查链接拼写或仓库是否已删除 |
+| 提示「仓库文件过多 / 克隆超时」 | 超过 10 万文件或 120 秒克隆上限，换更小的仓库 |
+| 没有 gitleaks 命中 | 未安装 gitleaks 时自动跳过；安装后放到 `eval/tools/gitleaks.exe` 或设置 `GITLEAKS_PATH` |
 
 ## 深度扫描配置
 
