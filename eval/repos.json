@@ -1,0 +1,61 @@
+[
+  {"url": "https://github.com/tiangolo/fastapi", "category": "python", "expect": {"type": "software"}},
+  {"url": "https://github.com/pallets/flask", "category": "python", "expect": {"type": "software"}},
+  {"url": "https://github.com/psf/requests", "category": "python", "expect": {"type": "software"}},
+  {"url": "https://github.com/django/django", "category": "python", "expect": {"type": "software"}},
+  {"url": "https://github.com/pallets/click", "category": "python", "expect": {"type": "software"}},
+  {"url": "https://github.com/psf/black", "category": "python", "expect": {"type": "software"}},
+
+  {"url": "https://github.com/expressjs/express", "category": "node", "expect": {"type": "software"}},
+  {"url": "https://github.com/axios/axios", "category": "node", "expect": {"type": "software"}},
+  {"url": "https://github.com/vitejs/vite", "category": "node", "expect": {"type": "software"}},
+  {"url": "https://github.com/socketio/socket.io", "category": "node", "expect": {"type": "software"}},
+  {"url": "https://github.com/eslint/eslint", "category": "node", "expect": {"type": "software"}},
+  {"url": "https://github.com/npm/cli", "category": "node", "expect": {"type": "software"}},
+
+  {"url": "https://github.com/spring-projects/spring-petclinic", "category": "java", "expect": {"type": "software"}},
+  {"url": "https://github.com/apache/commons-lang", "category": "java", "expect": {"type": "software"}},
+  {"url": "https://github.com/google/gson", "category": "java", "expect": {"type": "software"}},
+  {"url": "https://github.com/apache/maven", "category": "java", "expect": {"type": "software"}},
+  {"url": "https://github.com/junit-team/junit4", "category": "java", "expect": {"type": "software"}},
+
+  {"url": "https://github.com/gin-gonic/gin", "category": "go", "expect": {"type": "software"}},
+  {"url": "https://github.com/spf13/cobra", "category": "go", "expect": {"type": "software"}},
+  {"url": "https://github.com/gohugoio/hugo", "category": "go", "expect": {"type": "software"}},
+  {"url": "https://github.com/junegunn/fzf", "category": "go", "expect": {"type": "software"}},
+  {"url": "https://github.com/prometheus/prometheus", "category": "go", "expect": {"type": "software"}},
+
+  {"url": "https://github.com/BurntSushi/ripgrep", "category": "rust", "expect": {"type": "software"}},
+  {"url": "https://github.com/tokio-rs/tokio", "category": "rust", "expect": {"type": "software"}},
+  {"url": "https://github.com/serde-rs/serde", "category": "rust", "expect": {"type": "software"}},
+  {"url": "https://github.com/sharkdp/bat", "category": "rust", "expect": {"type": "software"}},
+  {"url": "https://github.com/clap-rs/clap", "category": "rust", "expect": {"type": "software"}},
+
+  {"url": "https://github.com/sindresorhus/awesome", "category": "docs", "expect": {"type": "docs"}},
+  {"url": "https://github.com/vinta/awesome-python", "category": "docs", "expect": {"type": "docs"}},
+  {"url": "https://github.com/EbookFoundation/free-programming-books", "category": "docs", "expect": {"type": "docs"}},
+  {"url": "https://github.com/awesome-selfhosted/awesome-selfhosted", "category": "docs", "expect": {"type": "docs"}},
+  {"url": "https://github.com/jwasham/coding-interview-university", "category": "docs", "expect": {"type": "docs"}},
+  {"url": "https://github.com/ossu/computer-science", "category": "docs", "expect": {"type": "docs"}},
+
+  {"url": "https://github.com/mrdbourke/pytorch-deep-learning", "category": "data", "expect": {"type": "any"}},
+  {"url": "https://github.com/microsoft/ML-For-Beginners", "category": "data", "expect": {"type": "any"}},
+  {"url": "https://github.com/openai/openai-cookbook", "category": "data", "expect": {"type": "any"}},
+  {"url": "https://github.com/jakevdp/PythonDataScienceHandbook", "category": "data", "expect": {"type": "any"}},
+  {"url": "https://github.com/fastai/fastbook", "category": "data", "expect": {"type": "any"}},
+
+  {"url": "https://github.com/gitleaks/gitleaks", "category": "security", "expect": {"type": "software"}},
+  {"url": "https://github.com/trufflesecurity/trufflehog", "category": "security", "expect": {"type": "software"}},
+  {"url": "https://github.com/elementalsouls/Claude-BugHunter", "category": "security", "expect": {"type": "software"}},
+  {"url": "https://github.com/OWASP/wstg", "category": "security", "expect": {"type": "any"}},
+
+  {"url": "https://github.com/PowerShell/PowerShell-Docs", "category": "windows", "expect": {"type": "docs"}, "expect_windows": true},
+  {"url": "https://github.com/PowerShell/PSReadLine", "category": "windows", "expect": {"type": "software"}, "expect_windows": true},
+  {"url": "https://github.com/microsoft/terminal", "category": "windows", "expect": {"type": "software"}, "expect_windows": true},
+  {"url": "https://github.com/dotnet/samples", "category": "windows", "expect": {"type": "any"}, "expect_windows": true},
+
+  {"url": "https://github.com/octocat/Hello-World", "category": "minimal", "expect": {"type": "empty"}},
+  {"url": "https://github.com/githubtraining/hellogitworld", "category": "minimal", "expect": {"type": "any"}},
+  {"url": "https://github.com/Ana12311/TaskFlow", "category": "minimal", "expect": {"type": "software"}},
+  {"url": "https://github.com/ghost-owner-xyz/nonexistent-repo-000", "category": "minimal", "expect": {"error": true}}
+]

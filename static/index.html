@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Git 仓库接入体检</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Git 仓库接入体检</h1>
+    <p class="sub">输入公开 GitHub 仓库链接，自动分析 README / 依赖 / 启动脚本完整度、Windows 脚本、硬编码路径与密钥风险</p>
+  </header>
+
+  <main>
+    <section class="input-card">
+      <form id="analyze-form">
+        <input
+          id="repo-url"
+          type="text"
+          placeholder="https://github.com/owner/repo"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button type="submit" id="submit-btn">开始体检</button>
+      </form>
+      <div id="error-box" class="error hidden"></div>
+    </section>
+
+    <section id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <span>正在克隆并扫描仓库…</span>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="meta" id="meta"></div>
+      <div class="stats" id="stats"></div>
+      <div class="type-evidence" id="type-evidence"></div>
+
+      <div class="overview">
+        <div class="score-panel">
+          <svg viewBox="0 0 120 120" class="ring" id="score-ring">
+            <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52"></circle>
+          </svg>
+          <div class="score-center">
+            <div class="score-num" id="score-num">0</div>
+            <div class="score-grade" id="score-grade">-</div>
+          </div>
+        </div>
+        <div class="summary">
+          <div class="chips" id="summary-chips"></div>
+        </div>
+      </div>
+
+      <h2>分项得分</h2>
+      <div class="components" id="components"></div>
+
+      <h2>主要风险清单</h2>
+      <div class="risks" id="risks"></div>
+
+      <div class="ai-section hidden" id="ai-section">
+        <h2>AI 接入建议 <span class="ai-badge" id="ai-model"></span></h2>
+        <p class="ai-verdict" id="ai-verdict"></p>
+        <p class="ai-reason" id="ai-reason"></p>
+        <ol class="ai-advice" id="ai-advice"></ol>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

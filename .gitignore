@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.tmp
+.pytest_cache/
+node_modules/
+eval/cache/
+eval/smoke.json
+eval/tools/
+eval/results.json
+eval/recall_results.json
+eval/compare_results.json
