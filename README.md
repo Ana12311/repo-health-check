@@ -85,6 +85,32 @@ uvicorn app.main:app --port 8000
 
 > 不建议加 `--reload`：热重载会在杀进程时留下孤儿 worker 占用端口。
 
+### 4. 停止服务
+
+**方式 A（推荐）**：在启动服务的那个终端窗口里按 `Ctrl + C`。
+
+**方式 B**：窗口已关闭、找不到原终端时，用命令强杀：
+
+```powershell
+netstat -ano | findstr :8000
+```
+
+找到 `LISTENING` 那一行，最后一列是进程号 PID，然后：
+
+```powershell
+taskkill /PID <PID> /T /F
+```
+
+> `/T` 连同子进程一起结束（应对 `--reload` 留下的孤儿 worker），`/F` 强制。
+
+一条命令直接结束 8000 端口所有进程：
+
+```powershell
+Get-NetTCPConnection -LocalPort 8000 -State Listen |
+  Select-Object -ExpandProperty OwningProcess -Unique |
+  ForEach-Object { taskkill /PID $_ /T /F }
+```
+
 ### 如何确认 API key 生效
 
 | 现象 | 有 key | 无 key |
