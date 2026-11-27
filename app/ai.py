@@ -48,6 +48,11 @@ def has_api_key() -> bool:
     return bool(_runtime_key or os.environ.get("DEEPSEEK_API_KEY"))
 
 
+def runtime_key_set() -> bool:
+    """网页里是否填过 key（与 .env 区分）。"""
+    return bool(_runtime_key)
+
+
 def get_client():
     """全局唯一的 DeepSeek 客户端（OpenAI 兼容协议）。无 key 时返回 None。
 

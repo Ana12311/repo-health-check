@@ -13,10 +13,22 @@ const keyStatus = document.getElementById("key-status");
   try {
     const r = await fetch("/api/status");
     const d = await r.json();
-    keyStatus.textContent = d.key_configured ? "已配置 ✓" : "未配置";
-    keyStatus.className = "key-status " + (d.key_configured ? "on" : "off");
+    renderKeyStatus(d);
   } catch (e) { /* 忽略 */ }
 })();
+
+function renderKeyStatus(d) {
+  if (d.runtime) {
+    keyStatus.textContent = "已配置（本次填的 key）✓";
+    keyStatus.className = "key-status on";
+  } else if (d.env) {
+    keyStatus.textContent = "已配置（.env / 环境变量）";
+    keyStatus.className = "key-status on";
+  } else {
+    keyStatus.textContent = "未配置";
+    keyStatus.className = "key-status off";
+  }
+}
 
 saveKeyBtn.addEventListener("click", async () => {
   const key = apiKeyInput.value.trim();
@@ -28,8 +40,12 @@ saveKeyBtn.addEventListener("click", async () => {
       body: JSON.stringify({ api_key: key }),
     });
     const d = await r.json();
-    keyStatus.textContent = d.key_configured ? "已配置 ✓" : "未配置（空 key 已清除）";
-    keyStatus.className = "key-status " + (d.key_configured ? "on" : "off");
+    renderKeyStatus({ runtime: d.key_configured && key !== "", env: false });
+    if (key === "") {
+      // 清空后回退到 .env 状态，重新查一次
+      const r2 = await fetch("/api/status");
+      renderKeyStatus(await r2.json());
+    }
   } catch (e) {
     keyStatus.textContent = "保存失败：" + e.message;
     keyStatus.className = "key-status off";

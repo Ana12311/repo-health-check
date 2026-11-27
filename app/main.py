@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .agent import run_agent
-from .ai import has_api_key, set_runtime_key
+from .ai import has_api_key, runtime_key_set, set_runtime_key
 from .git_ops import (
     RepoError, check_repo_size, cleanup_dir, clone_repo, get_commit_sha,
     make_temp_dir, parse_repo_url,
@@ -36,7 +36,11 @@ def index() -> FileResponse:
 
 @app.get("/api/status")
 def status():
-    return {"key_configured": has_api_key()}
+    return {
+        "key_configured": has_api_key(),
+        "runtime": runtime_key_set(),
+        "env": bool(os.environ.get("DEEPSEEK_API_KEY")),
+    }
 
 
 @app.post("/api/set-key")
