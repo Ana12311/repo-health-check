@@ -56,7 +56,7 @@ form.addEventListener("submit", async (e) => {
     const resp = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ repo_url: url }),
+      body: JSON.stringify({ repo_url: url, api_key: apiKeyInput.value.trim() }),
     });
     const data = await resp.json();
     if (!data.ok) {

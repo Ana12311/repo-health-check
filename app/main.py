@@ -105,6 +105,8 @@ def _analyze(repo_url: str) -> dict:
 
 @app.post("/api/analyze")
 def analyze(req: AnalyzeRequest):
+    if req.api_key:
+        set_runtime_key(req.api_key)
     started = time.perf_counter()
     try:
         parse_repo_url(req.repo_url)
