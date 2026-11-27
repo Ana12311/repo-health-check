@@ -306,7 +306,9 @@ Agent 复核与「AI 接入建议」**共用同一个 DeepSeek 客户端、同�
 ## API
 
 - `GET /` — 体检页面
-- `POST /api/analyze` — 请求体 `{"repo_url": "https://github.com/owner/repo"}`
+- `GET /api/status` — 返回 `{key_configured, runtime, env}`，前端据此显示 API key 配置状态
+- `POST /api/set-key` — 请求体 `{"api_key": "sk-..."}`，把 key 存进服务内存（网页填 key 用）
+- `POST /api/analyze` — 请求体 `{"repo_url": "https://github.com/owner/repo", "api_key": "可选"}`；`api_key` 省略时用 `.env` / 环境变量`
 
 响应关键字段：
 
@@ -356,8 +358,13 @@ repo-health-check/
     customrules.py # .repohealth.json 规则与基线
     models.py
   static/          # 页面
-  tests/           # 30 个离线用例
+  tests/           # 38 个离线用例
   eval/            # 50 仓库评测 + 召回 + gitleaks 对比
   requirements.txt
   AI_USAGE.md
+  LICENSE          # MIT
 ```
+
+## 许可证
+
+[MIT](LICENSE)
