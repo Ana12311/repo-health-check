@@ -257,6 +257,12 @@ python eval/recall_test.py --agent   # 含 Agent 复核存活率（消耗 API）
 | 硬编码路径 | 194 条计入评分，961 条文档/测试示例不计分 |
 | 人工抽检 | high 严重度 6/6 真实，medium 约 70% |
 
+![评测核心指标](eval/accuracy.png)
+
+![各类型仓库评分中位数](eval/score_distribution.png)
+
+> 数据来自 50 个真实公开仓库评测、注入缺陷召回与 gitleaks 对比，图由 `python eval/plot_report.py` 生成（需 `matplotlib`）。
+
 ## 两级审核：确定性规则 + Agent 复核
 
 高置信度问题由正则直接定稿；不确定的交给 Agent，避免「规则误报污染分数、或漏报造成虚假安全感」。
