@@ -60,20 +60,26 @@ pip install -r requirements.txt
 
 API key 申请：<https://platform.deepseek.com/api_keys>
 
-**方式 A（推荐）**：在**项目根目录**创建 `.env`（可从 `.env.example` 复制）：
+**方式 A（推荐，最简单）**：启动后直接在**网页输入框**粘贴 key。
+
+打开页面后，在输入框下方的「粘贴 DeepSeek API key」处填 key，再点「开始体检」即可。key 只存在服务内存里，**重启服务即失效**，不会落盘，最安全。
+
+**方式 B**：在**项目根目录**创建 `.env`（可从 `.env.example` 复制）：
 
 ```ini
 DEEPSEEK_API_KEY=sk-你的真实key
 DEEPSEEK_MODEL=deepseek-chat
 ```
 
-**方式 B**：用环境变量（注意要与启动 uvicorn 在**同一个终端窗口**）：
+**方式 C**：用环境变量（注意要与启动 uvicorn 在**同一个终端窗口**）：
 
 ```powershell
 $env:DEEPSEEK_API_KEY = "sk-你的真实key"
 ```
 
-> `.env` 已列入 `.gitignore`，不会被提交。不要把 key 写进代码、README 或截图。
+> 优先级：网页填的 key > `.env` > 环境变量。`.env` 已列入 `.gitignore`，不会被提交。不要把 key 写进代码、README 或截图。
+
+> 三种方式填完后，页面输入框旁的状态会显示「已配置（本次填的 key）✓」或「已配置（.env / 环境变量）」。
 
 ### 3. 启动并访问
 
