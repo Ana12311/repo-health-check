@@ -124,3 +124,18 @@ h2 { font-size: 17px; margin: 28px 0 12px; }
 
 .hint { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
 .hint code { background: var(--card2); padding: 1px 5px; border-radius: 4px; }
+
+.key-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+.key-row input {
+  flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--card2); color: var(--text); font-size: 13px; outline: none;
+}
+.key-row input:focus { border-color: var(--accent); }
+.key-row button {
+  padding: 8px 14px; border: none; border-radius: 8px; cursor: pointer;
+  background: var(--card2); color: var(--text); font-size: 13px; border: 1px solid var(--border);
+}
+.key-row button:disabled { opacity: 0.5; }
+.key-status { font-size: 12px; }
+.key-status.on { color: var(--good); }
+.key-status.off { color: var(--muted); }

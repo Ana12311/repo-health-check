@@ -10,6 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .agent import run_agent
+from .ai import has_api_key, set_runtime_key
 from .git_ops import (
     RepoError, check_repo_size, cleanup_dir, clone_repo, get_commit_sha,
     make_temp_dir, parse_repo_url,
@@ -31,6 +32,18 @@ _ANALYZE_SEM = threading.Semaphore(3)
 @app.get("/")
 def index() -> FileResponse:
     return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+
+
+@app.get("/api/status")
+def status():
+    return {"key_configured": has_api_key()}
+
+
+@app.post("/api/set-key")
+def set_key(req: dict):
+    key = (req or {}).get("api_key", "")
+    set_runtime_key(key)
+    return {"key_configured": has_api_key()}
 
 
 def _scan_options() -> dict:

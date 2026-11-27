@@ -4,6 +4,39 @@ const btn = document.getElementById("submit-btn");
 const errorBox = document.getElementById("error-box");
 const loading = document.getElementById("loading");
 const result = document.getElementById("result");
+const apiKeyInput = document.getElementById("api-key");
+const saveKeyBtn = document.getElementById("save-key");
+const keyStatus = document.getElementById("key-status");
+
+// 启动时读取当前 key 配置状态
+(async function loadKeyStatus() {
+  try {
+    const r = await fetch("/api/status");
+    const d = await r.json();
+    keyStatus.textContent = d.key_configured ? "已配置 ✓" : "未配置";
+    keyStatus.className = "key-status " + (d.key_configured ? "on" : "off");
+  } catch (e) { /* 忽略 */ }
+})();
+
+saveKeyBtn.addEventListener("click", async () => {
+  const key = apiKeyInput.value.trim();
+  saveKeyBtn.disabled = true;
+  try {
+    const r = await fetch("/api/set-key", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: key }),
+    });
+    const d = await r.json();
+    keyStatus.textContent = d.key_configured ? "已配置 ✓" : "未配置（空 key 已清除）";
+    keyStatus.className = "key-status " + (d.key_configured ? "on" : "off");
+  } catch (e) {
+    keyStatus.textContent = "保存失败：" + e.message;
+    keyStatus.className = "key-status off";
+  } finally {
+    saveKeyBtn.disabled = false;
+  }
+});
 
 const SEV_TEXT = { high: "高危", medium: "中危", low: "低危" };
 const CONF_TEXT = { high: "确证", medium: "疑似", low: "待确认" };

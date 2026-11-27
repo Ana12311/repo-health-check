@@ -35,14 +35,29 @@ def _load_dotenv() -> None:
 
 _load_dotenv()
 
+# 网页里填的 key（运行时生效，存内存，不落盘）。优先级最高。
+_runtime_key: str | None = None
+
+
+def set_runtime_key(key: str | None) -> None:
+    global _runtime_key
+    _runtime_key = (key or "").strip() or None
+
+
+def has_api_key() -> bool:
+    return bool(_runtime_key or os.environ.get("DEEPSEEK_API_KEY"))
+
 
 def get_client():
-    """全局唯一的 DeepSeek 客户端（OpenAI 兼容协议）。无 key 时返回 None。"""
+    """全局唯一的 DeepSeek 客户端（OpenAI 兼容协议）。无 key 时返回 None。
+
+    优先级：网页填的 key > 环境变量 / .env。
+    """
     try:
         from openai import OpenAI
     except ImportError:
         return None
-    key = os.environ.get("DEEPSEEK_API_KEY")
+    key = _runtime_key or os.environ.get("DEEPSEEK_API_KEY")
     if not key:
         return None
     return OpenAI(api_key=key, base_url=DEEPSEEK_BASE_URL, timeout=60.0)

@@ -25,7 +25,12 @@
         <button type="submit" id="submit-btn">开始体检</button>
       </form>
       <div id="error-box" class="error hidden"></div>
-      <p class="hint">AI 复核与接入建议为可选项：在项目根目录 <code>.env</code> 中配置 <code>DEEPSEEK_API_KEY</code>；未配置时仅做规则检测，功能不受影响。</p>
+      <p class="hint">AI 复核与接入建议为可选项：未配置时仅做规则检测。两种配置方式任选——① 在下方直接填 key（存内存，重启失效）；② 项目根目录 <code>.env</code> 配 <code>DEEPSEEK_API_KEY</code>。</p>
+      <div class="key-row">
+        <input id="api-key" type="password" placeholder="可选：粘贴 DeepSeek API key" autocomplete="off" />
+        <button type="button" id="save-key">保存 key</button>
+        <span class="key-status" id="key-status"></span>
+      </div>
     </section>
 
     <section id="loading" class="loading hidden">
